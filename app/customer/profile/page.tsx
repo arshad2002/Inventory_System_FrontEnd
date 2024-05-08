@@ -1,24 +1,24 @@
 import axios from "axios";
 
 export default async function Profile() {
-  const response = await axios.get('http://127.0.0.1:3001/customers/profile');
+  const response = await axios.get(process.env.API_ENDPOINT+'/customers/profile', {
+    withCredentials: true
+  });
   const jsondata = response.data;
-  
-  jsondata.forEach((item:any) => {console.log(item.FirstName);})
+  console.log(jsondata); 
 
   return (
     <>
-      <head>
-        <title>Profile</title>
-      </head>
-      <body>
-      <div></div> 
-      </body>
+      <ul>
+        {jsondata.map((item: any, index: number) => (
+          <li key={index}>
+            <p>Name: {item.FirstName} {item.LastName}</p>
+            <p>Address: {item.HouseNumber}, {item.street}, {item.city}, {item.divition}, {item.postalCode}</p> 
+            <p>Phone: {item.phoneNumber}</p>
+            <button>Edit</button>
+          </li>
+        ))}
+      </ul>
     </>
   );
 }
-// async function getStaticProps() {
-//   const response = await axios.get('http://127.0.0.1:3001/customers/profile');
-//   const profiles = response.data;
-//   return profiles
-// }
