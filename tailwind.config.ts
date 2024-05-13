@@ -18,5 +18,6 @@ const config: Config = {
     
   },
   plugins: [daisyui,],
+  
 };
 export default config;
