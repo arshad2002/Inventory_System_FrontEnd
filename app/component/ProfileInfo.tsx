@@ -25,7 +25,9 @@ function ProfileInfo() {
       <ul>
         {data.map((item: any, index: number) => (
           <li key={index}>
-            <p>{item.name}</p>
+            <p>Name: {item.FirstName} {item.LastName}</p>
+            <p>Address: {item.HouseNumber} {item.street}, {item.city}, {item.divition}, {item.postalCode}</p>
+            <p>Phone Number: {item.phoneNumber}</p>
           </li>
         ))}
       </ul>
