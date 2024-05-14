@@ -3,6 +3,7 @@ import axios from "axios";
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
+import { toast } from 'react-hot-toast';
 
 export default function Signin(){
     const [email, setEmail] = useState("");
@@ -29,6 +30,7 @@ export default function Signin(){
             const { message, user } = response.data;
             if (message === 'Login successfull') {
                 console.log('Login successful:', user);
+                toast.success('Sign in successful');
                 sessionStorage.setItem('user', JSON.stringify(user));
                 router.push('/customer');
             } else if (message === 'Wrong Password') {

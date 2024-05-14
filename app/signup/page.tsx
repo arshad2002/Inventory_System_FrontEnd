@@ -21,7 +21,7 @@ export default function signUp(){
         const response = await axios.post(process.env.NEXT_PUBLIC_API_ENDPOINT+'/customers/signup', data, {
             headers: {
                 'Content-Type': 'application/json'
-            }
+            }, withCredentials: true
         });
         console.log(response);
     }
