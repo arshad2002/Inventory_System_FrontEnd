@@ -1,16 +1,53 @@
 'use client'
 import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react'
+import toast from 'react-hot-toast';
 
 export default function signUp(){
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [usernameError, setUsernameError] = useState("");
+    const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const router = useRouter();
+
+    const validateUsername = () => {
+        if (username.length < 3) {
+            setUsernameError("Username must be at least 3 characters long");
+            return false;
+        }
+        setUsernameError("");
+        return true;
+    };
+
+    const validateEmail = () => {
+        const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
+        if (!emailRegex.test(email)) {
+            setEmailError("Please enter a valid email");
+            return false;
+        }
+        setEmailError("");
+        return true;
+    };
+
+    const validatePassword = () => {
+        if (password.length < 6) {
+            setPasswordError("Password must be at least 6 characters long");
+            return false;
+        }
+        setPasswordError("");
+        return true;
+    };
 
     async function onSubmit(event: FormEvent) {
         event.preventDefault();
-     
+
+        if (!validateUsername() || !validateEmail() || !validatePassword()) {
+            return;
+        }
         const data = {
             username: username,
             password: password,
@@ -23,7 +60,15 @@ export default function signUp(){
                 'Content-Type': 'application/json'
             }, withCredentials: true
         });
-        console.log(response);
+        const message = response.data;
+        console.log(response.data);
+
+        if (response.data.message === 'SignUp completed') {
+            router.push('/signin');
+          }else{
+            toast.error('User Name or Email already in use')
+          }
+
     }
 
     return(
@@ -49,6 +94,11 @@ export default function signUp(){
 
                 <input type="submit" className="px-4 py-2 bg-blue-500 text-white rounded" value="SignUp"/>
                 <Link href="/signin">Sign In</Link>
+                <div>
+                {usernameError && <p className="error" style={{color: 'red'}}>{usernameError}</p>}
+                {emailError && <p className="error" style={{color: 'red'}}>{emailError}</p>}
+                {passwordError && <p className="error" style={{color: 'red'}}>{passwordError}</p>}
+                </div>
             </form>
         </div>
         </>
